@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lesionx</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Custom styles */
+        .preview-image {
+            max-width: 200px;
+            max-height: 200px;
+        }
+
+        .blurred {
+            filter: blur(5px);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 p-8">
+    <div class="max-w-md mx-auto bg-white p-6 rounded-md shadow-md">
+        <div class="flex space-between">
+        <h1 class="text-2xl font-bold mb-4">LesionX</h1> 
+        <label class="ml-auto align-baseline">
+        <input type="checkbox" checked id="toggleBlurBtn" onclick="toggleBlur()" class="bg-blue-500 text-white px-4 py-2 rounded-md"> Blur images
+        </label>
+        </div>
+        <div class="border-dashed border-2  text-center border-gray-300 p-6 mb-6" id="dropArea">
+            <div class="text-gray-400 mb-4">
+                <i class="fas fa-cloud-upload-alt fa-3x"></i>
+                <p class="mt-2">Drag & Drop or Click to Upload</p>
+            </div>
+            <input type="file" class="ml-10" id="fileInput" accept="image/*" onchange="fileInput(this)">
+        </div>
+        <div id="imagePreview" class="hidden">
+            <img id="previewImg" class="preview-image blurred block m-auto" alt="Uploaded Image">
+        </div>
+
+        <!--show result of skin disease prediction as keratosis-->
+        <div>
+            <h2 class="text-xl font-bold mb-4">Result</h2>
+            <p class="text-gray-600">The image is predicted to be a <span class="font-bold">Keratosis</span> 70%</p>
+        </div>
+    </div>
+
+    <script>
+        const arr = [
+               'Melanocytic nevi', 'Basal cell carcinoma', 'Melanoma',
+               'Actinic keratoses', 'Vascular lesions',
+               'Benign keratosis-like lesions ', 'Dermatofibroma'
+        ];
+
+        // hash file content to a number between 0 and 6
+        function hashFile(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = e.target.result;
+                const hash = content.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+                const index = hash % 7;
+                console.log(arr[index]);
+            }
+            reader.readAsText(file);
+        }
+
+        let fl;
+        function fileInput(elem){
+            const file = elem.files[0];
+            displayImage(file);
+        }
+
+        function previewImage(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function () {
+                const previewImg = document.getElementById('previewImg');
+                previewImg.src = reader.result;
+                document.getElementById('imagePreview').classList.remove('hidden');
+            }
+
+            reader.readAsDataURL(file);
+        }
+
+        function toggleBlur() {
+            const previewImg = document.getElementById('previewImg');
+            previewImg.classList.toggle('blurred');
+        }
+
+        const dropArea = document.getElementById('dropArea');
+
+        dropArea.addEventListener('dragover', (event) => {
+            event.preventDefault();
+            dropArea.classList.add('border-blue-500');
+        });
+
+        dropArea.addEventListener('dragleave', () => {
+            dropArea.classList.remove('border-blue-500');
+        });
+
+        dropArea.addEventListener('drop', (event) => {
+            event.preventDefault();
+            dropArea.classList.remove('border-blue-500');
+            console.log(event.dataTransfer.getData('text/html'));
+            document.appendChild(event.dataTransfer.getData('text/html'));
+            const file = event.dataTransfer.items[0].getAsFile();
+            displayImage(file);
+        });
+        
+        document.querySelector("input[type='checkbox']").addEventListener('change', function() {
+            if (this.checked) {
+                document.getElementById('previewImg').classList.add('blurred');
+            } else {
+                document.getElementById('previewImg').classList.remove('blurred');
+            }
+        });
+
+        function displayImage(file) {
+            fl = file;
+            const reader = new FileReader();
+
+            reader.onload = function () {
+                const previewImg = document.getElementById('previewImg');
+                previewImg.src = reader.result;
+                document.getElementById('imagePreview').classList.remove('hidden');
+            }
+
+            reader.readAsDataURL(file);
+
+            hashFile(file);
+        }
+    </script>
+</body>
+
+</html>
