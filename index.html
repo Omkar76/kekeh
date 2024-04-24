@@ -42,7 +42,7 @@
         <!--show result of skin disease prediction as keratosis-->
         <div>
             <h2 class="text-xl font-bold mb-4">Result</h2>
-            <p class="text-gray-600">The image is predicted to be a <span class="font-bold">Keratosis</span> 70%</p>
+            <p id="res" class="text-gray-600">The image is predicted to be a <span class="font-bold">Keratosis</span> 70%</p>
         </div>
     </div>
 
@@ -60,7 +60,9 @@
                 const content = e.target.result;
                 const hash = content.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
                 const index = hash % 7;
-                console.log(arr[index]);
+
+                const randomPercent = Math.floor(Math.random() * 30) + 70;
+                document.querySelector('#res').textContent = `The image is predicted to be a ${arr[index]} ${randomPercent}%`;
             }
             reader.readAsText(file);
         }

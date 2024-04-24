@@ -1,0 +1,11 @@
+@import '@mantine/core/styles.css';
+
+/*lets make light themed website*/
+
+body {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text-color);
+  background-color: #f5f7fa;
+}

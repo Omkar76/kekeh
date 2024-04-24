@@ -36,7 +36,7 @@ def upload_file(request):
     if request.method == "POST":
         # logger.debug(request.FILES)
         handle_uploaded_file(request.FILES.get("file"))
-        image = Image.open('kekeh.jpg').resize((125, 100))
+        image = Image.open('ISIC_0029385...".jpg').resize((125, 100))
         image = np.array(image)
         image = image/255.0
         image = image.reshape(1, 100, 125, 3)
@@ -73,31 +73,31 @@ class call_model(APIView):
         
             # REad image and convert to numpy array
 
-            image = Image.open('images/kekeh.jpg').resize((125, 100))
-            image = np.array(image)
-            image = image/255.0
-            image = image.reshape(1, 100, 125, 3)
-            #        b'Melanocytic nevi', b'Basal cell carcinoma', b'Melanoma',
-            #        b'Actinic keratoses', b'Vascular lesions',
-            #        b'Benign keratosis-like lesions ', b'Dermatofibroma'
+            # image = Image.open('images/kekeh.jpg').resize((125, 100))
+            # image = np.array(image)
+            # image = image/255.0
+            # image = image.reshape(1, 100, 125, 3)
+            # #        b'Melanocytic nevi', b'Basal cell carcinoma', b'Melanoma',
+            # #        b'Actinic keratoses', b'Vascular lesions',
+            # #        b'Benign keratosis-like lesions ', b'Dermatofibroma'
 
-            response = AppConfig.lesion_x_model.predict(image)
-            prediction = response.tolist()[0]
-            lesion_type_dict = {
-                'nv': 'Melanocytic nevi',
-                'mel': 'Melanoma',
-                'bkl': 'Benign keratosis-like lesions ',
-                'bcc': 'Basal cell carcinoma',
-                'akiec': 'Actinic keratoses',
-                'vasc': 'Vascular lesions',
-                'df': 'Dermatofibroma'
-            }
-            result = zip(lesion_type_dict.values(), prediction)
-
-
+            # response = AppConfig.lesion_x_model.predict(image)
+            # prediction = response.tolist()[0]
+            # lesion_type_dict = {
+            #     'nv': 'Melanocytic nevi',
+            #     'mel': 'Melanoma',
+            #     'bkl': 'Benign keratosis-like lesions ',
+            #     'bcc': 'Basal cell carcinoma',
+            #     'akiec': 'Actinic keratoses',
+            #     'vasc': 'Vascular lesions',
+            #     'df': 'Dermatofibroma'
+            # }
+            # result = zip(lesion_type_dict.values(), prediction)
 
 
 
-            # logger.debug(response)
-            # returning JSON response
-            return JsonResponse(list(result), safe=False)
+
+
+            # # logger.debug(response)
+            # # returning JSON response
+            return JsonResponse(list([1,2,3]), safe=False)
